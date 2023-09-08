@@ -5,11 +5,14 @@ export class User{
     @PrimaryColumn()
     id: number
 
-    @Column()
+    @Column({unique: true})
     name: string
 
     @Column({unique: true})
     email: string
+
+    @Column()
+    role: string
 
     @Column()
     password: string
