@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User{
     @PrimaryColumn()
+    @PrimaryGeneratedColumn('increment')
     id: number
 
     @Column({unique: true})

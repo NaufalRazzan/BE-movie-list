@@ -1,29 +1,29 @@
-import { IsNotEmpty, IsString, IsEmail } from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, validate } from "class-validator";
 
 export class InsertUserDto{
-    @IsNotEmpty()
-    @IsString()
+    @IsNotEmpty({message: 'username cannot be empty'})
+    @IsString({message: `'username' must be type of valid string`})
     username: string
 
-    @IsNotEmpty()
-    @IsEmail()
+    @IsNotEmpty({message: 'email cannot be empty'})
+    @IsEmail({}, {message: `'email' must be type of valid email`})
     email: string;
 
-    @IsNotEmpty()
-    @IsString()
+    @IsNotEmpty({message: 'role cannot be empty'})
+    @IsString({message: `'role' must be type of valid string`})
     role: string
 
-    @IsNotEmpty()
-    @IsString()
+    @IsNotEmpty({message: 'password cannot be empty'})
+    @IsString({message: `'password' must be type of valid string`})
     password: string;
 }
 
 export class SignInDto{
-    @IsNotEmpty()
-    @IsEmail()
+    @IsNotEmpty({message: 'email cannot be empty'})
+    @IsEmail({}, {message: `'email' must be type of valid email`})
     email: string
 
-    @IsNotEmpty()
-    @IsString()
+    @IsNotEmpty({message: 'password cannot be empty'})
+    @IsString({message: `'password' must be type of valid string`})
     password: string
 }
