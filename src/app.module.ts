@@ -12,7 +12,7 @@ import { UsersModule } from './users/users.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: "postgres://stqakvgy:Is94dqAOr9bGbxhoLpRD_BXN5FgfxPb0@rain.db.elephantsql.com/stqakvgy",
+      url: process.env.POSTGRES_URL,
       entities: [User],
       synchronize: true,
     }),
