@@ -12,7 +12,7 @@ import { UnhandledExceptionFilter } from 'src/filters/UnhandledException.filter'
     JwtModule.register({
       global: true,
       secret: process.env.SECRET_KEY,
-      signOptions: { expiresIn: '60s' }
+      signOptions: { expiresIn: '600s' }
     })
   ],
   controllers: [AuthController],
@@ -23,6 +23,8 @@ import { UnhandledExceptionFilter } from 'src/filters/UnhandledException.filter'
       useClass: UnhandledExceptionFilter
     }
   ],
-  exports: [AuthService]
+  exports: [
+    AuthService,
+  ]
 })
 export class AuthModule {}

@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UsePipes, ValidationPipe, HttpStatus, HttpException, HttpCode, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { InsertUserDto, SignInDto } from 'src/models/user.dto';
+import { InsertUserDto, SignInDto } from 'src/models/dto/user.dto';
 import { AuthGuard } from './auth.guard';
 
 @Controller('auth')

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, QueryFailedError } from 'typeorm';
-import { User } from 'src/models/user.entity';
+import { User } from 'src/models/entity/user.entity';
 import * as bcrypt from "bcrypt";
 
 @Injectable()
