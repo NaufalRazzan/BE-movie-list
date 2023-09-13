@@ -1,0 +1,45 @@
+version: '3'
+services:
+  app:
+    image: movie-app:movie-list-app
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - postgres
+      - mongodb
+    env_file: .env  # Specify the path to your .env file here
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_URL: ${POSTGRES_URL}  # Use URL-based environment variable
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo
+    environment:
+      MONGODB_URL: ${MONGODB_URL}  # Use URL-based environment variable
+    volumes:
+      - type: volume
+        source: mongodb-data
+        target: /data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  mongodb-data:
