@@ -14,7 +14,8 @@ export class MovieListService {
     ){}
 
     async create(createMovieDto: CreateMovieDto): Promise<Movie>{
-        return await new this.movieModel(createMovieDto).save()
+        const movie = new this.movieModel(createMovieDto)
+        return await movie.save()
     }
 
     async findAll(): Promise<Movie[]>{
