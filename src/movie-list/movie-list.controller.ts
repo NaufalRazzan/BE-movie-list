@@ -27,7 +27,7 @@ export class MovieListController {
     @UsePipes(new ValidationPipe({ transform: true }))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async insertMovie(@Body() createMovieDto: CreateMovieDto){
+    async create(@Body() createMovieDto: CreateMovieDto){
         try {
             const result = await this.movieService.create(createMovieDto)
             
@@ -36,13 +36,13 @@ export class MovieListController {
                 result: result
             }
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
     @Get('/fetchAllMovies')
     @UseGuards(AuthGuard)
-    async fetchAllMovie(){
+    async findAll(){
         try {
             const result = await this.movieService.findAll()
             if(!result){
@@ -57,13 +57,13 @@ export class MovieListController {
             }
         
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
     @Get('/fetchOneMovie')
     @UseGuards(AuthGuard)
-    async fetchOneMovie(@Query('title') title: string){
+    async findOne(@Query('title') title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
@@ -76,7 +76,7 @@ export class MovieListController {
                 details: result 
             }
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
@@ -84,27 +84,31 @@ export class MovieListController {
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async updateOneMovie(@Query() title: string, @Body() updatedMovie: UpdateMovieDto){
+    async updateMovie(@Query() title: string, @Body() updatedMovie: UpdateMovieDto){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
             }
 
-            const result = await this.updateOneMovie(title, updatedMovie)
+            const result = await this.updateMovie(title, updatedMovie)
 
             return{
                 message: 'updated movie',
                 details: result
             }
+            
         } catch (error) {
-            throw error
+            throw error;
         }
+    }
+    update(title: string, updatedMovie: UpdateMovieDto) {
+        throw new Error('Method not implemented.');
     }
 
     @Delete('/deleteOneMovie')
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async deleteOneMovie(@Query() title: string){
+    async delete(@Query() title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)

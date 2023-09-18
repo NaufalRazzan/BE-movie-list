@@ -9,6 +9,9 @@ import { HttpException, HttpStatus } from '@nestjs/common'
 
 @Injectable()
 export class MovieListService {
+    findAllMovies() {
+        throw new Error('Method not implemented.');
+    }
     constructor(@InjectModel(Movie.name) 
     private readonly movieModel: Model<Movie>,
     ){}
