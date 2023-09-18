@@ -18,11 +18,13 @@ import { CreateMovieDto } from 'src/models/dto/create-movie.dto';
 import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('movie-list')
 export class MovieListController {
     constructor(private readonly movieService: MovieListService){}
 
+    @ApiTags('CRUD')
     @Post('/insertOneMovie')
     @UsePipes(new ValidationPipe({ transform: true }))
     @UseGuards(RolesGuard)
@@ -40,6 +42,7 @@ export class MovieListController {
         }
     }
 
+    @ApiTags('CRUD')
     @Get('/fetchAllMovies')
     @UseGuards(AuthGuard)
     async findAll(){
@@ -61,6 +64,7 @@ export class MovieListController {
         }
     }
 
+    @ApiTags('CRUD')
     @Get('/fetchOneMovie')
     @UseGuards(AuthGuard)
     async findOne(@Query('title') title: string){
@@ -80,6 +84,7 @@ export class MovieListController {
         }
     }
 
+    @ApiTags('CRUD')
     @Put('/updateOneMovie')
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
@@ -105,6 +110,7 @@ export class MovieListController {
         throw new Error('Method not implemented.');
     }
 
+    @ApiTags('CRUD')
     @Delete('/deleteOneMovie')
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
