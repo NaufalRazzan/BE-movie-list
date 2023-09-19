@@ -6,8 +6,10 @@ import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { Movie } from 'src/models/schema/movie.schema';
 import { DeleteResult } from 'typeorm/driver/mongodb/typings';
 import { HttpException, HttpStatus } from '@nestjs/common'
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Injectable()
+@ApiBearerAuth()
 export class MovieListService {
     findAllMovies() {
         throw new Error('Method not implemented.');

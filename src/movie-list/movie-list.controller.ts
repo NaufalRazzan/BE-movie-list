@@ -18,13 +18,21 @@ import { CreateMovieDto } from 'src/models/dto/create-movie.dto';
 import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiHeader, ApiResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiResponse({status: 401, description: 'No token'})
+@ApiResponse({status: 403, description: 'Wrong role'})
+@ApiTags('CRUD')
 @Controller('movie-list')
 export class MovieListController {
     constructor(private readonly movieService: MovieListService){}
 
-    @ApiTags('CRUD')
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Post('/insertOneMovie')
     @UsePipes(new ValidationPipe({ transform: true }))
     @UseGuards(RolesGuard)
@@ -42,7 +50,6 @@ export class MovieListController {
         }
     }
 
-    @ApiTags('CRUD')
     @Get('/fetchAllMovies')
     @UseGuards(AuthGuard)
     async findAll(){
@@ -64,7 +71,6 @@ export class MovieListController {
         }
     }
 
-    @ApiTags('CRUD')
     @Get('/fetchOneMovie')
     @UseGuards(AuthGuard)
     async findOne(@Query('title') title: string){
@@ -84,18 +90,22 @@ export class MovieListController {
         }
     }
 
-    @ApiTags('CRUD')
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Put('/updateOneMovie')
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async updateMovie(@Query() title: string, @Body() updatedMovie: UpdateMovieDto){
+    async update(@Query('title') title: string, @Body() updatedMovie: UpdateMovieDto){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
             }
 
-            const result = await this.updateMovie(title, updatedMovie)
+            const result = await this.movieService.update(title, updatedMovie)
 
             return{
                 message: 'updated movie',
@@ -106,15 +116,16 @@ export class MovieListController {
             throw error;
         }
     }
-    update(title: string, updatedMovie: UpdateMovieDto) {
-        throw new Error('Method not implemented.');
-    }
 
-    @ApiTags('CRUD')
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Delete('/deleteOneMovie')
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async delete(@Query() title: string){
+    async delete(@Query('title') title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
