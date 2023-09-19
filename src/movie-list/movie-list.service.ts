@@ -9,24 +9,28 @@ import { HttpException, HttpStatus } from '@nestjs/common'
 
 @Injectable()
 export class MovieListService {
-    findAllMovies() {
-        throw new Error('Method not implemented.');
-    }
     constructor(@InjectModel(Movie.name) 
     private readonly movieModel: Model<Movie>,
     ){}
 
     async create(createMovieDto: CreateMovieDto): Promise<Movie>{
         const movie = new this.movieModel(createMovieDto)
-        return await movie.save()
+        try {
+            return await movie.save()
+        } catch (error) {
+            if(error.code === 11000 && error.keyPattern && error.keyPattern.title === 1){
+                throw new HttpException(`movie with the given title '${createMovieDto.title}' already exist`, HttpStatus.CONFLICT)
+            }
+            throw error
+        }
     }
 
     async findAll(): Promise<Movie[]>{
-        return await this.movieModel.find()
+        return await this.movieModel.find().lean()
     }
 
     async findOne(title: string): Promise<Movie>{
-        const result = await this.movieModel.findOne({ title: title })
+        const result = await this.movieModel.findOne({ codeTitle: title }).lean()
         if(!result){
             throw new HttpException('no movie found', HttpStatus.NOT_FOUND)
         }
@@ -34,21 +38,23 @@ export class MovieListService {
         return result
     }
 
-    async update(title: string, updatedMovieDto: UpdateMovieDto): Promise<UpdateWriteOpResult>{
-        const result = await this.movieModel.updateOne(
-            { title: title },
-            { $set: {...updatedMovieDto} }
-        )
-        if(result.modifiedCount == 0){
+    async update(title: string, updatedMovieDto: UpdateMovieDto): Promise<UpdateMovieDto>{
+        const result = await this.movieModel.findOneAndUpdate(
+            { codeTitle: title },
+            { $set: {...updatedMovieDto} },
+            { new: true }
+        ).lean()
+        if(!result){
             throw new  HttpException('no movie found to be updated', HttpStatus.NOT_FOUND)
         }
 
-        return result        
+        console.log('get called')
+        return result
     }
 
-    async removeOne(title: string): Promise<DeleteResult>{
-        const result = await this.movieModel.deleteOne({ title: title })
-        if(result.deletedCount == 0){
+    async removeOne(title: string): Promise<Movie>{
+        const result = await this.movieModel.findOneAndDelete({ codeTitle: title }).lean()
+        if(!result){
             throw new HttpException('no movie found to be deleted', HttpStatus.NOT_FOUND)
         }
 

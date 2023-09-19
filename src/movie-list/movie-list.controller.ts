@@ -2,7 +2,6 @@ import {
     Controller, 
     Post, 
     UsePipes, 
-    HttpCode,
     HttpStatus, 
     HttpException,
     ValidationPipe, 
@@ -18,6 +17,7 @@ import { CreateMovieDto } from 'src/models/dto/create-movie.dto';
 import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Movie } from 'src/models/schema/movie.schema';
 
 @Controller('movie-list')
 export class MovieListController {
@@ -29,6 +29,13 @@ export class MovieListController {
     @UseGuards(AuthGuard)
     async create(@Body() createMovieDto: CreateMovieDto){
         try {
+            if(!createMovieDto){
+                throw new HttpException('request body failed to get parsed', HttpStatus.UNPROCESSABLE_ENTITY)
+            }
+
+            if(!createMovieDto.duration || !createMovieDto.genres || !createMovieDto.rating || !createMovieDto.title || !createMovieDto.codeTitle){
+                throw new HttpException('empty request body fields', HttpStatus.BAD_REQUEST)
+            }
             const result = await this.movieService.create(createMovieDto)
             
             return{
@@ -45,7 +52,7 @@ export class MovieListController {
     async findAll(){
         try {
             const result = await this.movieService.findAll()
-            if(!result){
+            if(!result || !result.length){
                 return{
                     message: 'movies empty'
                 }
@@ -84,31 +91,32 @@ export class MovieListController {
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async updateMovie(@Query() title: string, @Body() updatedMovie: UpdateMovieDto){
+    async updateMovie(@Query('title') title: string, @Body() updatedMovie: UpdateMovieDto){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
             }
 
-            const result = await this.updateMovie(title, updatedMovie)
+            if(!updatedMovie){
+                throw new HttpException('request body failed to get parsed', HttpStatus.UNPROCESSABLE_ENTITY)
+            }
 
-            return{
+            const updatedResult = await this.movieService.update(title, updatedMovie)
+
+            return {
                 message: 'updated movie',
-                details: result
+                details: updatedResult
             }
             
         } catch (error) {
             throw error;
         }
     }
-    update(title: string, updatedMovie: UpdateMovieDto) {
-        throw new Error('Method not implemented.');
-    }
 
     @Delete('/deleteOneMovie')
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async delete(@Query() title: string){
+    async delete(@Query('title') title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
