@@ -48,7 +48,6 @@ export class MovieListService {
             throw new  HttpException('no movie found to be updated', HttpStatus.NOT_FOUND)
         }
 
-        console.log('get called')
         return result
     }
 
