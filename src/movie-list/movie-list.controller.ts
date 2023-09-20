@@ -21,6 +21,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiTags, ApiBearerAuth, ApiHeader, ApiResponse } from '@nestjs/swagger';
 
 @ApiBearerAuth()
+@ApiResponse({status: 400, description: 'Please enter by following the example'})
 @ApiResponse({status: 401, description: 'No token'})
 @ApiResponse({status: 403, description: 'Wrong role'})
 @ApiTags('CRUD')
