@@ -1,7 +1,7 @@
 import { IsLowercase, IsNotEmpty, IsString, NotContains } from "class-validator";
 
 
-export class CreateMovieDto {
+export class CreateMovieDto {z
   @IsString({message: 'title must be a type of string'})
   @IsNotEmpty({message: 'title cannot be empty'})
   title: string;
