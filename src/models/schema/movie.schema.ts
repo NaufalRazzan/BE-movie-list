@@ -4,8 +4,11 @@ export type MovieDocument = Movie & Document
 
 @Schema()
 export class Movie{
-    @Prop()
+    @Prop({unique: true})
     title: string
+
+    @Prop()
+    codeTitle: string
 
     @Prop()
     genres: string

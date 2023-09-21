@@ -16,6 +16,13 @@ export class CreateMovieDto {
   })
   @IsNotEmpty({message: 'genre cannot be empty'})
     @IsString({message: `'genre' must be type of valid string`})
+
+  @IsString({message: 'code title cannot be empty'})
+  @IsLowercase({message: 'code title must be lowercase'})
+  @NotContains(' ', {message: 'code title cannot have a whitespace'})
+  codeTitle: string
+
+  @IsString({message: 'genres must be a type of string'})
   genres: string;
 
   @ApiProperty({
@@ -24,6 +31,8 @@ export class CreateMovieDto {
   })
   @IsNotEmpty({message: 'duration cannot be empty'})
   @IsString({message: `'duration' must be type of valid string`})
+
+  @IsString({message: 'duration must be a type of string'})
   duration: string;
 
   @ApiProperty({
@@ -32,5 +41,7 @@ export class CreateMovieDto {
   })
   @IsNotEmpty({message: 'rating cannot be empty'})
   @IsString({message: `'rating' must be type of valid string`})
+
+  @IsString({message: 'rating must be a type of string'})
   rating: string;
 }
