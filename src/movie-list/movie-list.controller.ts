@@ -17,12 +17,22 @@ import { CreateMovieDto } from 'src/models/dto/create-movie.dto';
 import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Movie } from 'src/models/schema/movie.schema';
+import { ApiTags, ApiBearerAuth, ApiHeader, ApiResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiResponse({status: 400, description: 'Please enter by following the example'})
+@ApiResponse({status: 401, description: 'No token'})
+@ApiResponse({status: 403, description: 'Wrong role'})
+@ApiTags('CRUD')
 @Controller('movie-list')
 export class MovieListController {
     constructor(private readonly movieService: MovieListService){}
 
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Post('/insertOneMovie')
     @UsePipes(new ValidationPipe({ transform: true }))
     @UseGuards(RolesGuard)
@@ -87,6 +97,11 @@ export class MovieListController {
         }
     }
 
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Put('/updateOneMovie')
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
@@ -113,6 +128,11 @@ export class MovieListController {
         }
     }
 
+    @ApiHeader({
+        name: 'Role',
+        description: 'role must be lowercase',
+        required: true
+    })
     @Delete('/deleteOneMovie')
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)

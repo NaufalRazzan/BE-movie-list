@@ -2,12 +2,15 @@ import { Controller, Post, Body, UsePipes, ValidationPipe, HttpStatus, HttpExcep
 import { AuthService } from './auth.service';
 import { InsertUserDto, SignInDto } from 'src/models/dto/user.dto';
 import { AuthGuard } from './auth.guard';
+import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Sign In and Sign Up')
 @Controller('auth')
 export class AuthController {
    constructor(private authservice: AuthService){}
 
     @Post('signup')
+    @ApiResponse({status: 409, description: 'Username or email has been registered'})
     @UsePipes(new ValidationPipe({transform: true}))
     async signup(@Body() body: InsertUserDto){
         try {
@@ -33,6 +36,7 @@ export class AuthController {
     }
 
     @HttpCode(HttpStatus.OK)
+    @ApiResponse({status: 400, description: 'Wrong email or password'})
     @Post('signin')
     @UsePipes(new ValidationPipe({transform: true}))
     async signin(@Body() payload: SignInDto){
@@ -52,6 +56,10 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
+    @ApiResponse({status: 200, description: 'Logged in'})
+    @ApiResponse({status: 401, description: 'Unauthorized'})
+    @ApiResponse({status: 403, description: 'Forbidden'})
     @HttpCode(HttpStatus.OK)
     @Get('/test')
     @UseGuards(AuthGuard)
