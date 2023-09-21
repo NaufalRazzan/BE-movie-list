@@ -8,6 +8,12 @@ export class UpdateMovieDto extends PartialType(CreateMovieDto) {
         example: "Shrek"
       })
       title: string;
+
+      @ApiProperty({
+        description: "Title of a movie but written with no space and lowercase",
+        example: "shrek"
+      })
+      codeTitle: string
     
       @ApiProperty({
         description: "Genres of a movie",

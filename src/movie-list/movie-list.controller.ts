@@ -23,7 +23,6 @@ import { Movie } from 'src/models/schema/movie.schema';
 @ApiBearerAuth()
 @ApiResponse({status: 400, description: 'Please enter by following the example'})
 @ApiResponse({status: 401, description: 'No token'})
-@ApiResponse({status: 403, description: 'Wrong role'})
 @ApiTags('CRUD')
 @Controller('movie-list')
 export class MovieListController {
@@ -35,6 +34,8 @@ export class MovieListController {
         required: true
     })
     @Post('/insertOneMovie')
+    @ApiResponse({status: 403, description: 'Wrong role'})
+    @ApiResponse({status: 404, description: 'No movie found'})
     @UsePipes(new ValidationPipe({ transform: true }))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
@@ -81,7 +82,7 @@ export class MovieListController {
 
     @Get('/fetchOneMovie')
     @UseGuards(AuthGuard)
-    async findOne(@Query('title') title: string){
+    async findOne(@Query('codetitle') title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
@@ -103,11 +104,13 @@ export class MovieListController {
         description: 'role must be lowercase',
         required: true
     })
+    @ApiResponse({status: 403, description: 'Wrong role'})
+    @ApiResponse({status: 404, description: 'No movie found'})
     @Put('/updateOneMovie')
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async updateMovie(@Query('title') title: string, @Body() updatedMovie: UpdateMovieDto){
+    async updateMovie(@Query('codetitle') title: string, @Body() updatedMovie: UpdateMovieDto){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
@@ -135,9 +138,11 @@ export class MovieListController {
         required: true
     })
     @Delete('/deleteOneMovie')
+    @ApiResponse({status: 403, description: 'Wrong role'})
+    @ApiResponse({status: 404, description: 'No movie found'})
     @UseGuards(RolesGuard)
     @UseGuards(AuthGuard)
-    async delete(@Query('title') title: string){
+    async delete(@Query('codetitle') title: string){
         try {
             if(!title){
                 throw new HttpException('empty query parameter', HttpStatus.BAD_REQUEST)
