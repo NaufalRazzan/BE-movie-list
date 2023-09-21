@@ -18,6 +18,7 @@ import { UpdateMovieDto } from 'src/models/dto/update-movie.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiTags, ApiBearerAuth, ApiHeader, ApiResponse } from '@nestjs/swagger';
+import { Movie } from 'src/models/schema/movie.schema';
 
 @ApiBearerAuth()
 @ApiResponse({status: 400, description: 'Please enter by following the example'})

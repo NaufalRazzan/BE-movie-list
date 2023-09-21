@@ -19,8 +19,8 @@ export class CreateMovieDto {
     description: "Genres of a movie",
     example: "Action, Adventure, Comedy"
   })
-  @IsNotEmpty({message: 'genre cannot be empty'})
-    @IsString({message: `'genre' must be type of valid string`})
+
+  @IsString({message: 'genres must be a type of string'})
   genres: string;
 
   @ApiProperty({
@@ -37,5 +37,7 @@ export class CreateMovieDto {
   })
   @IsNotEmpty({message: 'rating cannot be empty'})
   @IsString({message: `'rating' must be type of valid string`})
+
+  @IsString({message: 'rating must be a type of string'})
   rating: string;
 }
