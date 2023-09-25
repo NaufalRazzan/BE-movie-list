@@ -1,5 +1,5 @@
+import { IsLowercase, IsNotEmpty, IsString, NotContains } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, IsLowercase, NotContains} from "class-validator";
 
 export class CreateMovieDto {
   @ApiProperty({
@@ -10,10 +10,6 @@ export class CreateMovieDto {
   @IsString({message: `'title' must be type of valid string`})
   title: string;
 
-  @ApiProperty({
-    description: "Title of a movie but written with no space and lowercase",
-    example: "shrek"
-  })
   @IsString({message: 'code title cannot be empty'})
   @IsLowercase({message: 'code title must be lowercase'})
   @NotContains(' ', {message: 'code title cannot have a whitespace'})
@@ -23,8 +19,8 @@ export class CreateMovieDto {
     description: "Genres of a movie",
     example: "Action, Adventure, Comedy"
   })
-  @IsNotEmpty({message: 'genre cannot be empty'})
-  @IsString({message: `'genre' must be type of valid string`})
+
+  @IsString({message: 'genres must be a type of string'})
   genres: string;
 
   @ApiProperty({
